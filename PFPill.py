@@ -13,7 +13,3 @@ img2 = Image.open(image_2_directory)
 img1.paste(img2, (x_coord,y_coord), mask = img2)
 
 img1.show()
-
-# /Users/sam/Desktop/IMG_3185.png
-
-# /Users/sam/Desktop/5am_Profile_Pic_PFP.png
