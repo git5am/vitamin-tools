@@ -4,3 +4,4 @@ It is extremely finnicky at the moment i'd reccomend just playing with the numbe
 # Price Bot
 A bot with an updating status to show Vitamin Coin's price!
 # ^ - ^
+Thanks for checking out this repo \(^-^)/
