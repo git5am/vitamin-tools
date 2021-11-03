@@ -1,37 +1,32 @@
+import aiohttp
+import asyncio
 import discord
 from discord.ext.commands import Bot
 from discord.ext import commands
-import asyncio
-import requests
-import json
-import time
 import datetime
+import time
 
-# configuring discord bot
 PREFIX = ("$")
-client = commands.Bot(command_prefix = PREFIX, description = 'Hi')
+client = commands.Bot(command_prefix = PREFIX, description = "VITC Price")
+localtime = time.asctime( time.localtime(time.time()) )
+delay = int(input("How many seconds delay would you like to have (recommended 30): "))
 
-# bot status
 @client.event
 async def on_ready():
     while True:
-        # defining vitex api
-        url = "https://vitex.vite.net/api/v1/exchange-rate?tokenSymbols=VITC-000"
-        # connecting to the api
-        response = requests.get(url)
-        # setting up parsing
-        response = requests.get(url)
-        data = response.text
-        parsed = json.loads(data)
-        data = parsed["data"]
-        type(data)
-        usdRate = data[0]['usdRate']
-        time.sleep(1)
-        localtime = time.asctime( time.localtime(time.time()) )
-        # changing status
-        await client.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = str(usdRate) + "$"))
-        # printing VITC value!
-        print("<===============Made by:5am===============>")
-        print("VITC's price @ " + str(localtime) + " is $" + str(usdRate))
+        async with aiohttp.ClientSession() as session:
 
-client.run('token')
+            api_url = "https://vitex.vite.net/api/v1/exchange-rate?tokenSymbols=VITC-000"
+            print("Opening URL: success")
+            async with session.get(api_url) as resp:
+                api_data = await resp.json()
+                data = api_data["data"]
+                usdRate = data[0]["usdRate"]
+                print("Waiting for " + str(delay) + " seconds to pass.....")
+                # waiting
+                time.sleep(delay)
+                # changing status
+                await client.change_presence(activity = discord.Activity(type = discord.ActivityType.watching, name = str(usdRate) + "$"))
+                print("Updated status to " + str(usdRate) + " @ " + str(localtime))
+
+client.run("TOKEN HERE")
